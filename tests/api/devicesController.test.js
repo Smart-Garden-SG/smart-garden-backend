@@ -41,19 +41,19 @@ describe('Testes para o controller de dispositivos', () => {
   // Teste para adicionar um dispositivo
   describe('POST /devices', () => {
     it('deve adicionar um novo dispositivo com sucesso', async () => {
-      const newDevice = { name: 'Dispositivo 3', lat: 12.0, lon: 22.0 };
-
-      // Simulando a resposta de sucesso no banco de dados
-      db.query.mockResolvedValue([{}]); 
-
+      const newDevice = { name: 'Dispositivo 3', lat: 12.0, lon: 22.0, user_id: 1 };
+    
+      db.query.mockResolvedValueOnce([{ insertId: 1 }]);
+    
       const response = await request(app)
         .post('/devices')
         .send(newDevice);
-
+    
       expect(response.status).toBe(201);
       expect(response.body.success).toBe(true);
       expect(response.body.message).toBe('Dispositivo adicionado com sucesso');
     });
+    
 
     it('deve retornar erro 400 quando campos obrigatórios estiverem ausentes', async () => {
       const response = await request(app)
@@ -66,17 +66,19 @@ describe('Testes para o controller de dispositivos', () => {
     });
 
     it('deve retornar erro 500 em caso de falha no banco de dados', async () => {
-      const newDevice = { name: 'Dispositivo 5', lat: 13.0, lon: 23.0 };
-      db.query.mockRejectedValue(new Error('Database error'));
-
+      const newDevice = { name: 'Dispositivo 5', lat: 13.0, lon: 23.0, user_id: 1 };
+    
+      db.query.mockRejectedValueOnce(new Error('Database error'));
+    
       const response = await request(app)
         .post('/devices')
         .send(newDevice);
-
+    
       expect(response.status).toBe(500);
       expect(response.body.success).toBe(false);
       expect(response.body.message).toBe('Erro ao adicionar dispositivo');
     });
+    
   });
 
   // Teste para atualizar um dispositivo

@@ -1,5 +1,5 @@
 // controllers/measuresController.js
-const db = require("../models/dbTest");
+const db = require("../models/db");
 
 exports.getMeasures = async (req, res) => {
   const { deviceId, startDate, endDate } = req.query;

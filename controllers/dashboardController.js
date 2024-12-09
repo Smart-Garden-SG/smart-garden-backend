@@ -2,9 +2,15 @@
 
 const db = require('../models/db');
 
-// Obter o último registro de dados do sensor com base em um intervalo de datas
 exports.getDashboardData = async (req, res) => {
   try {
+    const { deviceId, startDate, endDate } = req.query;
+
+    // Verificar se deviceId foi fornecido
+    if (!deviceId) {
+      return res.status(400).json({ success: false, message: 'deviceId é necessário' });
+    }
+
     // Inicialização da query base
     let query = `
       SELECT 
@@ -24,17 +30,15 @@ exports.getDashboardData = async (req, res) => {
       WHERE 1=1
     `;
 
-    const { deviceId, startDate, endDate } = req.query;
     const queryParams = [];
 
     // Verificar se deviceId foi passado
-    if (deviceId) {
-      if (isNaN(Number(deviceId))) {
-        return res.status(400).json({ success: false, message: 'deviceId inválido' });
-      }
-      query += ' AND device_id = ?';
-      queryParams.push(deviceId);
+    if (isNaN(Number(deviceId))) {
+      return res.status(400).json({ success: false, message: 'deviceId inválido' });
     }
+
+    query += ' AND device_id = ?';
+    queryParams.push(deviceId);
 
     // Adicionar filtro de intervalo de datas se startDate e endDate forem passados
     if (startDate && endDate) {

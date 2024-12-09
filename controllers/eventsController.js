@@ -22,12 +22,19 @@ exports.getEvents = async (req, res) => {
   }
 };
 
-// Deletar evento
 exports.deleteEvent = async (req, res) => {
-  const { desc: description } = req.params; // Renomeando o parâmetro para evitar conflito
+  const { desc } = req.params;
+  const { device_id } = req.query;
+
+  if (!device_id) {
+    return res.status(400).json({ success: false, message: 'device_id é obrigatório' });
+  }
 
   try {
-    const [result] = await db.query('DELETE FROM tb_events WHERE `desc` = ?', [description]);
+    const [result] = await db.query(
+      'DELETE FROM tb_events WHERE `desc` = ? AND device_id = ?',
+      [desc, device_id]
+    );
 
     if (result.affectedRows === 0) {
       return res.status(404).json({ success: false, message: 'Evento não encontrado' });
@@ -39,3 +46,6 @@ exports.deleteEvent = async (req, res) => {
     res.status(500).json({ success: false, message: 'Erro ao deletar evento' });
   }
 };
+
+
+

@@ -1,13 +1,18 @@
-// tests/api/events.test.js
 const request = require('supertest');
-const app = require('../../index'); // Assumindo que o index.js exporta o app
+const app = require('../../index');
+const db = require('../../models/db');
+
+// Mock para simular a resposta do banco de dados
+jest.mock('../../models/db');
 
 describe('Eventos Controller', () => {
   it('deve deletar o evento com sucesso', async () => {
     const desc = 'High-P Fertilizer';
     const device_id = 2;
 
-    const response = await request(app).delete(`/events?desc=${desc}&device_id=${device_id}`);
+    db.query.mockResolvedValueOnce([{ affectedRows: 1 }]);
+
+    const response = await request(app).delete(`/events/${encodeURIComponent(desc)}?device_id=${device_id}`);
     
     expect(response.status).toBe(200);
     expect(response.body.success).toBe(true);
@@ -16,9 +21,11 @@ describe('Eventos Controller', () => {
 
   it('deve retornar erro 404 se o evento não for encontrado', async () => {
     const desc = 'Nonexistent Event';
-    const device_id = 9999; // Garantir que o evento não exista
+    const device_id = 9999;
 
-    const response = await request(app).delete(`/events?desc=${desc}&device_id=${device_id}`);
+    db.query.mockResolvedValueOnce([{ affectedRows: 0 }]);
+
+    const response = await request(app).delete(`/events/${encodeURIComponent(desc)}?device_id=${device_id}`);
     
     expect(response.status).toBe(404);
     expect(response.body.success).toBe(false);
@@ -26,10 +33,12 @@ describe('Eventos Controller', () => {
   });
 
   it('deve retornar erro 500 se falhar ao deletar evento', async () => {
-    const desc = 'High-P Fertilizer';
-    const device_id = 2;  // Aqui, simule um erro de banco de dados para testar o erro 500
+    const desc = 'Evitar adubos ricos em Nitrogênio (Excesso detectado)';
+    const device_id = 8;
 
-    const response = await request(app).delete(`/events?desc=${desc}&device_id=${device_id}`);
+    db.query.mockRejectedValueOnce(new Error('Erro no banco'));
+
+    const response = await request(app).delete(`/events/${encodeURIComponent(desc)}?device_id=${device_id}`);
     
     expect(response.status).toBe(500);
     expect(response.body.success).toBe(false);
