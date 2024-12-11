@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   build:
-    name: Build and Release
+    name: Build, Test, and Release
     runs-on: ubuntu-latest
 
     strategy:
@@ -32,6 +32,9 @@ jobs:
       - name: Instalar dependências
         run: npm install
 
+      - name: Rodar testes com Jest
+        run: npm test
+
       - name: Fazer build do projeto
         run: npm run build
 
@@ -39,11 +42,10 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: nodejs-app-build
-          path: dist/ # Ajuste conforme o diretório de saída do build
+          path: dist/
 
       - name: Criar Release no GitHub
         if: startsWith(github.ref, 'refs/tags/')
-        id: create_release
         uses: softprops/action-gh-release@v1
         with:
           name: Release ${{ github.ref_name }}
