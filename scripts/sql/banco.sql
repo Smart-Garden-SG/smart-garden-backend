@@ -18,37 +18,6 @@ USE `smartlettuce`;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `climate_data`
---
-
-DROP TABLE IF EXISTS `climate_data`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `climate_data` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `temperature` decimal(5,2) DEFAULT NULL,
-  `humidity` decimal(5,2) DEFAULT NULL,
-  `wind_speed` decimal(5,2) DEFAULT NULL,
-  `wind_direction` varchar(50) DEFAULT NULL,
-  `pressure` decimal(7,2) DEFAULT NULL,
-  `rainfall` decimal(5,2) DEFAULT NULL,
-  `uv_index` decimal(4,2) DEFAULT NULL,
-  `recorded_at` timestamp NULL DEFAULT CURRENT_TIMESTAMP,
-  `location` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=62 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
--- Dumping data for table `climate_data`
---
-
-LOCK TABLES `climate_data` WRITE;
-/*!40000 ALTER TABLE `climate_data` DISABLE KEYS */;
-/*!40000 ALTER TABLE `climate_data` ENABLE KEYS */;
-UNLOCK TABLES;
-
---
 -- Table structure for table `tb_devices`
 --
 
@@ -64,7 +33,7 @@ CREATE TABLE `tb_devices` (
   PRIMARY KEY (`id`),
   KEY `fk_user_device` (`user_id`),
   CONSTRAINT `fk_user_device` FOREIGN KEY (`user_id`) REFERENCES `tb_users` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -73,7 +42,7 @@ CREATE TABLE `tb_devices` (
 
 LOCK TABLES `tb_devices` WRITE;
 /*!40000 ALTER TABLE `tb_devices` DISABLE KEYS */;
-INSERT INTO `tb_devices` VALUES (2,'teste','sensorTeste',NULL,3),(7,'-26.479990','Sensor Real','-49.038153',3),(8,'-26.479990','sensorTeste','-49.038153',1);
+INSERT INTO `tb_devices` VALUES (1,'1','teste','1',3),(2,'24','Sensor Teste - Laboratório','69',3),(7,'-26.479990','Sensor Real - Casa','-49.038153',3),(8,'1','teste','1',3);
 /*!40000 ALTER TABLE `tb_devices` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -103,7 +72,7 @@ CREATE TABLE `tb_events` (
 
 LOCK TABLES `tb_events` WRITE;
 /*!40000 ALTER TABLE `tb_events` DISABLE KEYS */;
-INSERT INTO `tb_events` VALUES ('Calcário (Óxido de cálcio, calcário dolomítico) - Corrigir baixo pH','warning',1,7,NULL,'2024-12-04 03:19:10'),('Evitar adubos ricos em Fósforo (Excesso detectado)','warning',1,7,NULL,'2024-12-04 03:22:06'),('Evitar adubos ricos em Nitrogênio (Excesso detectado)','warning',1,8,NULL,'2024-12-04 02:35:26');
+INSERT INTO `tb_events` VALUES ('Calcário (Óxido de cálcio, calcário dolomítico) - Corrigir baixo pH','warning',1,2,5.50961,'2024-12-08 14:49:46'),('Enxofre Elementar (Sulfato de ferro ou enxofre elementar) - Corrigir alto pH','warning',1,7,NULL,'2024-12-04 03:38:24'),('Evitar adubos ricos em Fósforo (Excesso detectado)','warning',1,7,NULL,'2024-12-04 03:22:06'),('Temperatura baixa... As plantas estão tremendo! ⚠️','warning',0,2,18.4138,'2024-12-08 14:48:32'),('Umidade muito baixa! ? As plantas estão ressecando!','critical',0,2,52,'2024-12-07 23:58:06'),('Umidade muito baixa! ? As plantas estão ressecando!','critical',0,7,33.2,'2024-12-08 14:48:33'),('Umidade no limite! ? Atenção para evitar fungos.','warning',0,2,67.972,'2024-12-08 14:48:32');
 /*!40000 ALTER TABLE `tb_events` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -166,7 +135,7 @@ CREATE TABLE `tb_users` (
 
 LOCK TABLES `tb_users` WRITE;
 /*!40000 ALTER TABLE `tb_users` DISABLE KEYS */;
-INSERT INTO `tb_users` VALUES (1,'pio','$2b$10$KIXP58wZ6oxzHzg.QUNdTu3yHQ1Ov01Qfl9cn5iGFM2F4FAaJlNxi','pio@p.com','admin'),(2,NULL,'$2b$10$d9ovnBgiQg1Rj3UIV6mlo.Fjyy71Xq787jxe/STvb0Fq8G2qdlAGS','admin@gmail.com',NULL),(3,NULL,'$2b$10$5VIG3kBLhHg2uSmDG/kXmOiCFdN4sgYtpXwVuWVqE9wa1HEnPxBNy','teste@123.com',NULL);
+INSERT INTO `tb_users` VALUES (1,'pio','$2b$10$KIXP58wZ6oxzHzg.QUNdTu3yHQ1Ov01Qfl9cn5iGFM2F4FAaJlNxi','pio@p.com','admin'),(2,NULL,'$2b$10$d9ovnBgiQg1Rj3UIV6mlo.Fjyy71Xq787jxe/STvb0Fq8G2qdlAGS','admin@gmail.com','user'),(3,NULL,'$2b$10$5VIG3kBLhHg2uSmDG/kXmOiCFdN4sgYtpXwVuWVqE9wa1HEnPxBNy','teste@123.com','admin');
 /*!40000 ALTER TABLE `tb_users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -179,4 +148,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-12-04  0:30:43
+-- Dump completed on 2024-12-11  1:13:53
