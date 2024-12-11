@@ -7,7 +7,7 @@
     "start": "node index.js",
     "dev": "nodemon index.js",
     "test": "jest",
-    "build": "echo 'Build step completed successfully'"
+    "build": "mkdir -p dist && echo 'Build concluído' > dist/build.txt"
   },
   "keywords": [],
   "author": "",
